@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { supabase } from './lib/supabase'
 import ProductVisual from './components/ProductVisual.vue'
+import AdminPanel from './components/AdminPanel.vue'
 
 const tg=window.Telegram?.WebApp;tg?.ready();tg?.expand()
 const dict={
@@ -11,6 +12,7 @@ const dict={
 }
 const params=new URLSearchParams(location.search),initial=params.get('lang')||localStorage.getItem('ender-lang')||tg?.initDataUnsafe?.user?.language_code||'uk'
 const launchToken=params.get('auth')||''
+const adminMode=params.get('admin')==='1'
 const requestedProduct=Number(params.get('product')||0)
 const lang=ref(['uk','ru','en'].includes(initial)?initial:'en'),tr=computed(()=>dict[lang.value])
 watch(lang,v=>{localStorage.setItem('ender-lang',v);document.documentElement.lang=v})
@@ -30,7 +32,7 @@ async function order(){error.value='';if(!tg?.initData&&!launchToken&&!import.me
 onMounted(()=>{document.documentElement.lang=lang.value;load()})
 </script>
 
-<template><div class="app"><header><div class="brand"><i>E</i><div><b>ENDER MARKET</b><small>PC COMPONENTS</small></div></div><div class="headerActions"><div class="languages"><button v-for="code in ['uk','ru','en']" :key="code" :class="{active:lang===code}" @click="lang=code">{{code.toUpperCase()}}</button></div><button class="cartBtn" @click="cartOpen=true">🛒 <span>{{count}}</span></button></div></header>
+<template><AdminPanel v-if="adminMode" :launch-token="launchToken" :lang="lang"/><div v-else class="app"><header><div class="brand"><i>E</i><div><b>ENDER MARKET</b><small>PC COMPONENTS</small></div></div><div class="headerActions"><div class="languages"><button v-for="code in ['uk','ru','en']" :key="code" :class="{active:lang===code}" @click="lang=code">{{code.toUpperCase()}}</button></div><button class="cartBtn" @click="cartOpen=true">🛒 <span>{{count}}</span></button></div></header>
 <main><section class="hero"><div class="grid"></div><small class="overline">{{tr.tag}}</small><h1>{{tr.hero1}}<br><em>{{tr.hero2}}</em></h1><p>{{tr.heroText}}</p><a href="#catalog">{{tr.catalogLink}}</a><div class="stats"><div><b>100%</b><small>{{tr.original}}</small></div><div><b>24/7</b><small>{{tr.orders}}</small></div><div><b>14</b><small>{{tr.exchange}}</small></div></div></section>
 <section id="catalog" class="catalog"><div class="sectionTitle"><div><small>{{tr.choose}}</small><h2>{{tr.catalog}}</h2></div><span>{{visible.length}} {{tr.products}}</span></div><nav class="categories"><button v-for="c in categories" :key="c.key" :class="{active:category===c.key}" @click="category=c.key;brand='all'">{{c.label}}</button></nav>
 <button class="filterToggle" @click="filtersOpen=!filtersOpen">⚙ {{tr.filters}} <span>{{filtersOpen?'−':'+'}}</span></button><div class="filterPanel" :class="{open:filtersOpen}"><label>{{tr.manufacturer}}<select v-model="brand"><option value="all">{{tr.allBrands}}</option><option v-for="b in brands" :key="b" :value="b">{{b}}</option></select></label><fieldset><legend>{{tr.price}}</legend><input v-model.number="minPrice" type="number" min="0" :placeholder="tr.from"><input v-model.number="maxPrice" type="number" min="0" :placeholder="tr.to"></fieldset><label>{{tr.sort}}<select v-model="sort"><option value="popular">{{tr.popular}}</option><option value="cheap">{{tr.cheap}}</option><option value="expensive">{{tr.expensive}}</option><option value="name">{{tr.nameSort}}</option></select></label><label class="check"><input v-model="stockOnly" type="checkbox"><span>{{tr.stockOnly}}</span></label><button class="reset" @click="resetFilters">{{tr.reset}}</button></div>

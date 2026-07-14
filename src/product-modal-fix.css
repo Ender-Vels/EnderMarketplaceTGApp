@@ -1,0 +1,1 @@
+.productModal{width:calc(100vw - 24px);max-width:min(780px,calc(100vw - 24px));overflow-x:hidden}.modalBody{min-width:0;overflow-x:hidden}.modalBody dl,.modalBody dl div{min-width:0}.modalBody dd{min-width:0;overflow-wrap:anywhere}.modalClose{position:fixed;right:24px;top:24px}@media(min-width:700px){.modalClose{position:absolute;right:14px;top:14px}}

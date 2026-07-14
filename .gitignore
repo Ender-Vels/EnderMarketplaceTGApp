@@ -13,6 +13,7 @@ dist-ssr
 *.local
 ui-check.png
 ui-localized.png
+ui-product-modal.png
 
 # Editor directories and files
 .vscode/*

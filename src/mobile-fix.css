@@ -1,0 +1,1 @@
+@media(max-width:520px){header{display:grid;grid-template-columns:auto 1fr}.brand>div{display:none}.headerActions{justify-self:end}.hero>p{width:calc(100vw - 32px)}.categories{width:calc(100vw - 32px)}.catalog{width:100vw}}

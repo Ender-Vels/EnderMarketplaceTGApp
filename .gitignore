@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 ui-check.png
+ui-localized.png
 
 # Editor directories and files
 .vscode/*
